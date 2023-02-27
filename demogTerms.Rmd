@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+CLEAR WORKSPACE
+```{r}
+rm(list=ls())
+```
+DATA
+```{r}
+#library(rio)
+demogTerms="https://github.com/annks10/repo3/raw/main/demographic%20terms.xlsx"  
+demogTerms=import(demogTerms)
+```
+CHECK COLUMNS
+```{r}
+names(demogTerms)
+```
+
+REPLACE NA VALUES WITH BLANK
+```{r}
+demogTerms[is.na(demogTerms)]= ""
+```
+
+ORGANIZING DATA INTO A LONG FORMAT 
+```{r}
+demogTerms_single=data.frame(x=unlist(demogTerms))
+demogTerms_single= cbind(newColName = rownames(demogTerms_single), demogTerms_single)
+rownames(demogTerms_single)= 1:nrow(demogTerms_single)
+```
+RENAMING COLUMNS 
+```{r}
+names(demogTerms_single)[c(1,2)]=c("Federal Funders","Demographic Terms")
+
+#library(tm)#remove numbers from a text
+demogTerms_single$`Federal Funders`= removeNumbers(demogTerms_single$`Federal Funders`)
+```
+
+REMOVE UNWANTED ROWS 
+
+```{r}
+demogTerms_single=demogTerms_single[-c(14:57,82:114,158:171,201:228,237:258,392:399,411:456,469:513,522:570,591:627),]
+row.names(demogTerms_single)=NULL
+```
+REMOVE UNWANTED ROWS ROUND 2
+```{r}
+demogTerms_single=demogTerms_single[-c(8:15,23:47,64:80,87:109,118:144),]
+row.names(demogTerms_single)=NULL
+demogTerms_single=demogTerms_single[-c(21:24,49,156,157,169,170,200,201),]
+row.names(demogTerms_single)=NULL
+```
+
+REPLACE STRING WITHER ANOTHER STRING ON A SINGLE COLUMN
+
+```{r}
+#demoTerms_single$`Demographic Terms`[demoTerms_single$`Demographic Terms` == 'w']= 'White'
+```
+
+GSUB TO REMOVE WHITESPACE FROM A STRING
+```{r}
+#demogTerms_single$`Demographic Terms`=gsub("\\s", "", demogTerms_single$`Demographic Terms`)   
+```
+
+
+```{r}
+
+```
+
